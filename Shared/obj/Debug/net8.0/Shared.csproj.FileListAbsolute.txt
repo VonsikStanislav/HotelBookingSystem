@@ -1,0 +1,11 @@
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\bin\Debug\net8.0\Shared.deps.json
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\bin\Debug\net8.0\Shared.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\bin\Debug\net8.0\Shared.pdb
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\Shared.GeneratedMSBuildEditorConfig.editorconfig
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\Shared.AssemblyInfoInputs.cache
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\Shared.AssemblyInfo.cs
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\Shared.csproj.CoreCompileInputs.cache
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\Shared.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\refint\Shared.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\Shared.pdb
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\ref\Shared.dll
