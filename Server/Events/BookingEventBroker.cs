@@ -1,4 +1,4 @@
-namespace HotelBooking.Server.Events;
+п»їnamespace HotelBooking.Server.Events;
 
 public sealed class BookingEventBroker
 {
@@ -27,11 +27,20 @@ public sealed class BookingEventBroker
         }
 
         Console.WriteLine(
-            $"[BROKER] Subscriber '{subscriber.Name}' подписан на '{eventType}'.");
+            $"[{DateTime.Now:HH:mm:ss.fff}] " +
+            $"Broker в†’ SUBSCRIBE | " +
+            $"Subscriber = {subscriber.Name}; EventType = {eventType}");
     }
 
     public PublicationResult Publish(BookingEvent @event)
     {
+        Console.WriteLine(
+            $"[{DateTime.Now:HH:mm:ss.fff}] " +
+            $"Broker в†’ EVENT RECEIVED | " +
+            $"Client {@event.ClientId?.ToString() ?? "-"}; " +
+            $"EventType = {@event.EventType}; " +
+            $"EntityId = {@event.EntityId}");
+
         List<IEventSubscriber> subscribers;
 
         lock (_syncRoot)
@@ -46,24 +55,34 @@ public sealed class BookingEventBroker
 
         foreach (var subscriber in subscribers)
         {
+            Console.WriteLine(
+                $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                $"Broker в†’ {subscriber.Name} | " +
+                $"EventType = {@event.EventType}");
+
             try
             {
                 subscriber.Handle(@event);
                 deliveredCount++;
 
                 Console.WriteLine(
-                    $"[BROKER] Событие '{@event.EventType}' доставлено " +
-                    $"подписчику '{subscriber.Name}'.");
+                    $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                    $"{subscriber.Name} в†’ SUCCESS | " +
+                    $"EventType = {@event.EventType}; " +
+                    $"EntityId = {@event.EntityId}");
             }
             catch (Exception exception)
             {
                 var error =
-                    $"Subscriber '{subscriber.Name}': {exception.Message}";
+                    $"{subscriber.Name}: {exception.Message}";
 
                 errors.Add(error);
 
                 Console.WriteLine(
-                    $"[BROKER ERROR] Не удалось доставить '{@event.EventType}': {error}");
+                    $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                    $"{subscriber.Name} в†’ ERROR | " +
+                    $"EventType = {@event.EventType}; " +
+                    $"Error = {exception.Message}");
             }
         }
 

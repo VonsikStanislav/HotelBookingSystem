@@ -1,4 +1,4 @@
-namespace HotelBooking.Server.Events;
+п»їnamespace HotelBooking.Server.Events;
 
 public sealed class BookingEventPublisher
 {
@@ -14,16 +14,27 @@ public sealed class BookingEventPublisher
         try
         {
             Console.WriteLine(
-                $"[PUBLISHER] Публикация '{@event.EventType}', " +
-                $"EntityId = {@event.EntityId}.");
+                $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                $"Client {@event.ClientId?.ToString() ?? "-"} в†’ " +
+                $"Publisher в†’ PUBLISH | " +
+                $"EventType = {@event.EventType}; " +
+                $"EntityId = {@event.EntityId}");
 
             var result = _broker.Publish(@event);
+
+            Console.WriteLine(
+                $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                $"Publisher в†’ RESULT | " +
+                $"EventType = {@event.EventType}; " +
+                $"Delivered = {result.DeliveredCount}; " +
+                $"Success = {result.Success}");
 
             if (!result.Success)
             {
                 Console.WriteLine(
-                    $"[PUBLISHER ERROR] Событие '{@event.EventType}' " +
-                    "доставлено не всем подписчикам.");
+                    $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                    $"Publisher в†’ ERROR | " +
+                    string.Join("; ", result.Errors));
             }
 
             return result;
@@ -31,7 +42,8 @@ public sealed class BookingEventPublisher
         catch (Exception exception)
         {
             Console.WriteLine(
-                $"[PUBLISHER ERROR] Ошибка публикации: {exception.Message}");
+                $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                $"Publisher в†’ ERROR | {exception.Message}");
 
             return PublicationResult.Failed(exception.Message);
         }

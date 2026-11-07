@@ -105,7 +105,8 @@ public class BookingService : IBookingService
                 ["CheckIn"] = checkIn.Date,
                 ["CheckOut"] = checkOut.Date,
                 ["TotalPrice"] = booking.TotalPrice
-            });
+            },
+            clientId: guestId);
         return Response.Ok("Бронирование успешно создано.", new
         {
             booking,
@@ -158,7 +159,8 @@ public class BookingService : IBookingService
                 {
                     ["RoomId"] = booking.RoomId,
                     ["Status"] = booking.Status
-                });
+                },
+                clientId: booking.GuestId);
 
             return Response.Ok(
                 "Бронирование отменено.",
@@ -252,8 +254,10 @@ public class BookingService : IBookingService
                 {
                     ["PaymentId"] = payment.Id,
                     ["Amount"] = payment.Amount,
-                    ["PaidAt"] = payment.PaidAt
-                });
+                    ["PaidAt"] = payment.PaidAt,
+                    ["Status"] = payment.Status
+                },
+                clientId: booking.GuestId);
 
             return Response.Ok(
                 "Бронирование успешно оплачено.",
@@ -281,20 +285,24 @@ public class BookingService : IBookingService
     private void PublishEvent(
         string eventType,
         int bookingId,
-        IReadOnlyDictionary<string, object?> data)
+        IReadOnlyDictionary<string, object?> data,
+        int? clientId = null)
     {
         var @event = new BookingEvent(
             eventType,
             bookingId,
             DateTime.UtcNow,
-            data);
+            data,
+            clientId);
 
         var result = _eventPublisher.Publish(@event);
 
         if (!result.Success)
         {
             Console.WriteLine(
-                $"[BOOKING SERVICE] Ошибка доставки '{@event.EventType}': " +
+                $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                $"BookingService → EVENT ERROR | " +
+                $"EventType = {eventType}; " +
                 string.Join("; ", result.Errors));
         }
     }

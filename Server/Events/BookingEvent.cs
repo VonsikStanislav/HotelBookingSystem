@@ -4,4 +4,5 @@ public sealed record BookingEvent(
     string EventType,
     int EntityId,
     DateTime Timestamp,
-    IReadOnlyDictionary<string, object?> Data);
+    IReadOnlyDictionary<string, object?> Data,
+    int? ClientId = null);
