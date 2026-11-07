@@ -9,3 +9,4 @@ E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\refint\Shared.dll
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\Shared.pdb
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\ref\Shared.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Shared\obj\Debug\net8.0\Shared.sourcelink.json

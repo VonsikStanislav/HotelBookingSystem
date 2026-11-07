@@ -16,3 +16,7 @@ E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Server\
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Server\obj\Debug\net8.0\Server.pdb
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Server\obj\Debug\net8.0\Server.genruntimeconfig.cache
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Server\obj\Debug\net8.0\ref\Server.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Server\obj\Debug\net8.0\Server.sourcelink.json
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Server\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Server\bin\Debug\net8.0\Npgsql.dll

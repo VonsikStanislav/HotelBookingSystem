@@ -110,3 +110,7 @@ E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Tests\o
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Tests\obj\Debug\net8.0\Tests.pdb
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Tests\obj\Debug\net8.0\Tests.genruntimeconfig.cache
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Tests\obj\Debug\net8.0\ref\Tests.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Tests\obj\Debug\net8.0\Tests.sourcelink.json
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Tests\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Tests\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Tests\bin\Debug\net8.0\Npgsql.dll

@@ -16,3 +16,4 @@ E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Client\
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Client\obj\Debug\net8.0\Client.pdb
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Client\obj\Debug\net8.0\Client.genruntimeconfig.cache
 E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Client\obj\Debug\net8.0\ref\Client.dll
+E:\лабораторные_7_сем\РиОТ\labwork\HotelBookingSystem\Client\obj\Debug\net8.0\Client.sourcelink.json

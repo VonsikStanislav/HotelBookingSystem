@@ -60,6 +60,8 @@ public class DataStore
             }
         });
 
+        // В ЛР №2 AvailablePlaces — общий ресурс.
+        // Для демонстрации Race Condition у номера 101 значение равно 1.
         Rooms.AddRange(new[]
         {
             new Room
@@ -68,7 +70,8 @@ public class DataStore
                 HotelId = 1,
                 Number = "101",
                 Type = "Standard",
-                PricePerNight = 120m
+                PricePerNight = 120m,
+                AvailablePlaces = 1
             },
             new Room
             {
@@ -76,7 +79,8 @@ public class DataStore
                 HotelId = 1,
                 Number = "102",
                 Type = "Deluxe",
-                PricePerNight = 180m
+                PricePerNight = 180m,
+                AvailablePlaces = 1
             },
             new Room
             {
@@ -84,7 +88,8 @@ public class DataStore
                 HotelId = 2,
                 Number = "201",
                 Type = "Standard",
-                PricePerNight = 90m
+                PricePerNight = 90m,
+                AvailablePlaces = 1
             },
             new Room
             {
@@ -92,7 +97,8 @@ public class DataStore
                 HotelId = 2,
                 Number = "202",
                 Type = "Suite",
-                PricePerNight = 250m
+                PricePerNight = 250m,
+                AvailablePlaces = 1
             }
         });
     }

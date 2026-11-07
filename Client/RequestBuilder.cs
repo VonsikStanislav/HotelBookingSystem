@@ -93,10 +93,16 @@ public class RequestBuilder
         {
             Console.Write(message);
 
-            if (int.TryParse(Console.ReadLine(), out var value) && value > 0)
+            if (int.TryParse(
+                    Console.ReadLine(),
+                    out var value) &&
+                value > 0)
+            {
                 return value;
+            }
 
-            Console.WriteLine("Введите положительное целое число.");
+            Console.WriteLine(
+                "Введите положительное целое число.");
         }
     }
 

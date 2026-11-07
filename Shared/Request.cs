@@ -9,7 +9,7 @@ public class Request
     public string Operation { get; set; } = string.Empty;
 
     [JsonPropertyName("data")]
-    public JsonElement Data { get; set; }
+    public JsonElement? Data { get; set; }
 }
 
 public class CreateBookingData
