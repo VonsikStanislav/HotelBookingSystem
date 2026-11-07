@@ -2,10 +2,17 @@
 
 public sealed class BookingEventBroker
 {
-    private readonly Dictionary<string, List<IEventSubscriber>> _subscribers = new(
-        StringComparer.OrdinalIgnoreCase);
+    private readonly string _name;
+
+    private readonly Dictionary<string, List<IEventSubscriber>> _subscribers =
+        new(StringComparer.OrdinalIgnoreCase);
 
     private readonly object _syncRoot = new();
+
+    public BookingEventBroker(string name = "Broker")
+    {
+        _name = name;
+    }
 
     public void Subscribe(
         string eventType,
@@ -28,16 +35,18 @@ public sealed class BookingEventBroker
 
         Console.WriteLine(
             $"[{DateTime.Now:HH:mm:ss.fff}] " +
-            $"Broker → SUBSCRIBE | " +
-            $"Subscriber = {subscriber.Name}; EventType = {eventType}");
+            $"{_name} → SUBSCRIBE | " +
+            $"Subscriber = {subscriber.Name}; " +
+            $"EventType = {eventType}");
     }
 
-    public PublicationResult Publish(BookingEvent @event)
+    public Task<PublicationResult> PublishAsync(
+        BookingEvent @event,
+        CancellationToken cancellationToken = default)
     {
         Console.WriteLine(
             $"[{DateTime.Now:HH:mm:ss.fff}] " +
             $"Broker → EVENT RECEIVED | " +
-            $"Client {@event.ClientId?.ToString() ?? "-"}; " +
             $"EventType = {@event.EventType}; " +
             $"EntityId = {@event.EntityId}");
 
@@ -51,43 +60,75 @@ public sealed class BookingEventBroker
         }
 
         var errors = new List<string>();
-        var deliveredCount = 0;
+        var deliveryTasks = subscribers.Select(
+            subscriber => DeliverAsync(
+                subscriber,
+                @event,
+                errors,
+                cancellationToken));
 
-        foreach (var subscriber in subscribers)
+        return Task.WhenAll(deliveryTasks).ContinueWith(
+            _ =>
+            {
+                var deliveredCount = subscribers.Count(
+                    subscriber => subscriber.IsAvailable);
+
+                return errors.Count == 0
+                    ? PublicationResult.Published(deliveredCount)
+                    : new PublicationResult(false, deliveredCount, errors);
+            });
+    }
+
+    private static async Task DeliverAsync(
+        IEventSubscriber subscriber,
+        BookingEvent @event,
+        ICollection<string> errors,
+        CancellationToken cancellationToken)
+    {
+        Console.WriteLine(
+            $"[{DateTime.Now:HH:mm:ss.fff}] " +
+            $"Broker → {subscriber.Name} | " +
+            $"EventType = {@event.EventType}");
+
+        if (!subscriber.IsAvailable)
         {
+            var unavailableError =
+                $"Subscriber '{subscriber.Name}' недоступен.";
+
+            errors.Add(unavailableError);
+
             Console.WriteLine(
                 $"[{DateTime.Now:HH:mm:ss.fff}] " +
-                $"Broker → {subscriber.Name} | " +
-                $"EventType = {@event.EventType}");
+                $"{subscriber.Name} → UNAVAILABLE | " +
+                $"EventType = {@event.EventType}; " +
+                $"Error = {unavailableError}");
 
-            try
-            {
-                subscriber.Handle(@event);
-                deliveredCount++;
-
-                Console.WriteLine(
-                    $"[{DateTime.Now:HH:mm:ss.fff}] " +
-                    $"{subscriber.Name} → SUCCESS | " +
-                    $"EventType = {@event.EventType}; " +
-                    $"EntityId = {@event.EntityId}");
-            }
-            catch (Exception exception)
-            {
-                var error =
-                    $"{subscriber.Name}: {exception.Message}";
-
-                errors.Add(error);
-
-                Console.WriteLine(
-                    $"[{DateTime.Now:HH:mm:ss.fff}] " +
-                    $"{subscriber.Name} → ERROR | " +
-                    $"EventType = {@event.EventType}; " +
-                    $"Error = {exception.Message}");
-            }
+            return;
         }
 
-        return errors.Count == 0
-            ? PublicationResult.Published(deliveredCount)
-            : new PublicationResult(false, deliveredCount, errors);
+        try
+        {
+            await subscriber.HandleAsync(
+                @event,
+                cancellationToken);
+
+            Console.WriteLine(
+                $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                $"{subscriber.Name} → SUCCESS | " +
+                $"EventType = {@event.EventType}");
+        }
+        catch (Exception exception)
+        {
+            var error =
+                $"Subscriber '{subscriber.Name}': {exception.Message}";
+
+            errors.Add(error);
+
+            Console.WriteLine(
+                $"[{DateTime.Now:HH:mm:ss.fff}] " +
+                $"{subscriber.Name} → ERROR | " +
+                $"EventType = {@event.EventType}; " +
+                $"Error = {exception.Message}");
+        }
     }
 }

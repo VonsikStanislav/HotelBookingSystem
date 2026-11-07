@@ -1,5 +1,6 @@
 ﻿
 using HotelBooking.Server;
+using HotelBooking.Server.Events;
 
 var primaryConnectionString =
     "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=secret";

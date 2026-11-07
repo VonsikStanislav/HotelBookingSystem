@@ -33,30 +33,12 @@ public class Server
         DataStore = new DataStore();
 
         var eventSystem = new BookingEventSystem();
-        var eventPublisher = eventSystem.Publisher;
 
-        if (!string.IsNullOrWhiteSpace(postgresConnectionString))
-        {
-            var bookingService = new PostgresBookingService(
-                postgresConnectionString,
-                eventPublisher,
-                replicaConnectionString);
+        var bookingService = new BookingService(
+            DataStore,
+            eventSystem.Publisher);
 
-            _requestHandler = new RequestHandler(bookingService);
-
-            Log("DATABASE", "Primary: localhost:5432");
-            Log("DATABASE", "Replica: localhost:5433");
-        }
-        else
-        {
-            var bookingService = new BookingService(
-                DataStore,
-                eventPublisher);
-
-            _requestHandler = new RequestHandler(bookingService);
-
-            Log("DATABASE", "Используется DataStore в памяти.");
-        }
+        _requestHandler = new RequestHandler(bookingService);
 
         _jsonOptions = new JsonSerializerOptions
         {
@@ -318,3 +300,4 @@ public class Server
             $"Client {clientId}{taskPart} → {action} | {message}");
     }
 }
+

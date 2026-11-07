@@ -15,13 +15,24 @@ public sealed class PostgresBookingService : IBookingService
 
     public PostgresBookingService(
     string connectionString,
+    string? replicaConnectionString = null)
+    : this(
+        connectionString,
+        new BookingEventPublisher(
+            new BookingEventBroker()),
+        replicaConnectionString)
+{
+}
+
+public PostgresBookingService(
+    string connectionString,
     BookingEventPublisher eventPublisher,
     string? replicaConnectionString = null)
-    {
-        _connectionString = connectionString;
-        _eventPublisher = eventPublisher;
-        _replicaConnectionString = replicaConnectionString;
-    }
+{
+    _connectionString = connectionString;
+    _eventPublisher = eventPublisher;
+    _replicaConnectionString = replicaConnectionString;
+}
 
     public object SyncRoot => _syncRoot;
 

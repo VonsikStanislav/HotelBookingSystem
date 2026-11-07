@@ -4,13 +4,24 @@ public sealed class BookingEventSystem
 {
     public BookingEventSystem()
     {
-        Broker = new BookingEventBroker();
-        Publisher = new BookingEventPublisher(Broker);
+        PrimaryBroker = new BookingEventBroker("PrimaryBroker");
+        SecondaryBroker = new BookingEventBroker("SecondaryBroker");
+
+        BrokerCluster = new BookingBrokerCluster(
+            PrimaryBroker,
+            SecondaryBroker);
+
+        Publisher = new BookingEventPublisher(
+            BrokerCluster);
 
         RegisterSubscribers();
     }
 
-    public BookingEventBroker Broker { get; }
+    public BookingEventBroker PrimaryBroker { get; }
+
+    public BookingEventBroker SecondaryBroker { get; }
+
+    public BookingBrokerCluster BrokerCluster { get; }
 
     public BookingEventPublisher Publisher { get; }
 
@@ -20,13 +31,19 @@ public sealed class BookingEventSystem
         {
             new LoggerSubscriber(),
             new RoomServiceSubscriber(),
-            new NotificationServiceSubscriber()
+            new NotificationServiceSubscriber(),
+            new AuditSubscriber(),
+            new AnalyticsSubscriber()
         };
 
         foreach (var subscriber in subscribers)
         {
             foreach (var eventType in subscriber.EventTypes)
-                Broker.Subscribe(eventType, subscriber);
+            {
+                BrokerCluster.Subscribe(
+                    eventType,
+                    subscriber);
+            }
         }
     }
 }

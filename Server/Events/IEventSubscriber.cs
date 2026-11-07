@@ -4,7 +4,11 @@ public interface IEventSubscriber
 {
     string Name { get; }
 
+    bool IsAvailable { get; }
+
     IReadOnlyCollection<string> EventTypes { get; }
 
-    void Handle(BookingEvent @event);
+    Task HandleAsync(
+        BookingEvent @event,
+        CancellationToken cancellationToken = default);
 }

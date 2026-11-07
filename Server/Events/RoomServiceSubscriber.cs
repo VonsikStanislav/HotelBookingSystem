@@ -1,8 +1,10 @@
-namespace HotelBooking.Server.Events;
+п»їnamespace HotelBooking.Server.Events;
 
 public sealed class RoomServiceSubscriber : IEventSubscriber
 {
     public string Name => "RoomService";
+
+    public bool IsAvailable { get; private set; } = true;
 
     public IReadOnlyCollection<string> EventTypes { get; } =
         new[]
@@ -11,19 +13,30 @@ public sealed class RoomServiceSubscriber : IEventSubscriber
             "BookingCancelled"
         };
 
-    public void Handle(BookingEvent @event)
+    public void SetAvailability(bool isAvailable)
     {
-        if (@event.EventType == "BookingCreated")
-        {
-            Console.WriteLine(
-                $"[ROOM SERVICE] Номер заблокирован для бронирования " +
-                $"#{@event.EntityId}.");
-        }
-        else if (@event.EventType == "BookingCancelled")
-        {
-            Console.WriteLine(
-                $"[ROOM SERVICE] Ресурс освобождён для бронирования " +
-                $"#{@event.EntityId}.");
-        }
+        IsAvailable = isAvailable;
+
+        Console.WriteLine(
+            $"[{DateTime.Now:HH:mm:ss.fff}] " +
+            $"RoomService в†’ " +
+            $"{(isAvailable ? "AVAILABLE" : "UNAVAILABLE")}");
+    }
+
+    public async Task HandleAsync(
+        BookingEvent @event,
+        CancellationToken cancellationToken = default)
+    {
+        var startedAt = DateTime.Now;
+
+        Console.WriteLine(
+            $"[{startedAt:HH:mm:ss.fff}] " +
+            $"RoomService в†’ START | EventType = {@event.EventType}");
+
+        await Task.Delay(3000, cancellationToken);
+
+        Console.WriteLine(
+            $"[{DateTime.Now:HH:mm:ss.fff}] " +
+            $"RoomService в†’ END | EventType = {@event.EventType}");
     }
 }

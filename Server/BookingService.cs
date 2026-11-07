@@ -11,6 +11,14 @@ public class BookingService : IBookingService
     private readonly DataStore _store;
     private readonly BookingEventPublisher _eventPublisher;
 
+    public BookingService(DataStore store)
+        : this(
+            store,
+            new BookingEventPublisher(
+                new BookingEventBroker()))
+    {
+    }
+
     public BookingService(
         DataStore store,
         BookingEventPublisher eventPublisher)

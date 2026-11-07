@@ -2,14 +2,25 @@
 
 public sealed class BookingEventPublisher
 {
-    private readonly BookingEventBroker _broker;
+    private readonly BookingBrokerCluster _brokerCluster;
 
-    public BookingEventPublisher(BookingEventBroker broker)
+    public BookingEventPublisher(
+        BookingBrokerCluster brokerCluster)
     {
-        _broker = broker;
+        ArgumentNullException.ThrowIfNull(brokerCluster);
+
+        _brokerCluster = brokerCluster;
     }
 
-    public PublicationResult Publish(BookingEvent @event)
+    public BookingEventPublisher(
+        BookingEventBroker broker)
+        : this(new BookingBrokerCluster(broker))
+    {
+    }
+
+    public async Task<PublicationResult> PublishAsync(
+        BookingEvent @event,
+        CancellationToken cancellationToken = default)
     {
         try
         {
@@ -20,22 +31,15 @@ public sealed class BookingEventPublisher
                 $"EventType = {@event.EventType}; " +
                 $"EntityId = {@event.EntityId}");
 
-            var result = _broker.Publish(@event);
+            var result = await _brokerCluster.PublishAsync(
+                @event,
+                cancellationToken);
 
             Console.WriteLine(
                 $"[{DateTime.Now:HH:mm:ss.fff}] " +
                 $"Publisher → RESULT | " +
-                $"EventType = {@event.EventType}; " +
-                $"Delivered = {result.DeliveredCount}; " +
-                $"Success = {result.Success}");
-
-            if (!result.Success)
-            {
-                Console.WriteLine(
-                    $"[{DateTime.Now:HH:mm:ss.fff}] " +
-                    $"Publisher → ERROR | " +
-                    string.Join("; ", result.Errors));
-            }
+                $"Success = {result.Success}; " +
+                $"Delivered = {result.DeliveredCount}");
 
             return result;
         }
@@ -45,7 +49,16 @@ public sealed class BookingEventPublisher
                 $"[{DateTime.Now:HH:mm:ss.fff}] " +
                 $"Publisher → ERROR | {exception.Message}");
 
-            return PublicationResult.Failed(exception.Message);
+            return PublicationResult.Failed(
+                exception.Message);
         }
+    }
+
+    public PublicationResult Publish(
+        BookingEvent @event)
+    {
+        return PublishAsync(@event)
+            .GetAwaiter()
+            .GetResult();
     }
 }

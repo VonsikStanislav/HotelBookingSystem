@@ -1,8 +1,10 @@
-namespace HotelBooking.Server.Events;
+п»їnamespace HotelBooking.Server.Events;
 
 public sealed class NotificationServiceSubscriber : IEventSubscriber
 {
     public string Name => "NotificationService";
+
+    public bool IsAvailable => true;
 
     public IReadOnlyCollection<string> EventTypes { get; } =
         new[]
@@ -12,10 +14,22 @@ public sealed class NotificationServiceSubscriber : IEventSubscriber
             "PaymentCompleted"
         };
 
-    public void Handle(BookingEvent @event)
+    public async Task HandleAsync(
+        BookingEvent @event,
+        CancellationToken cancellationToken = default)
     {
+        var startedAt = DateTime.Now;
+
         Console.WriteLine(
-            $"[NOTIFICATION] Отправлено уведомление: " +
-            $"{@event.EventType}, бронирование #{ @event.EntityId}.");
+            $"[{startedAt:HH:mm:ss.fff}] " +
+            $"NotificationService в†’ START | " +
+            $"EventType = {@event.EventType}");
+
+        await Task.Delay(2000, cancellationToken);
+
+        Console.WriteLine(
+            $"[{DateTime.Now:HH:mm:ss.fff}] " +
+            $"NotificationService в†’ END | " +
+            $"EventType = {@event.EventType}");
     }
 }
